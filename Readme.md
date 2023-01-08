@@ -6,3 +6,20 @@ including the conversion to common types.
 
 Also, it contains tests for checking precision and performance.
 The full specification and report can be found in `docs/`.
+
+## Tests
+
+There are 2 types of tests present: precision and performance tests.
+The former runs operations to ensure that the number representation stays correct on operations,
+the latter compares FRINT's performance with float using all available operations.
+
+To run precision tests, use:
+```bash
+make test-precision && bin/test_precision
+```
+
+
+To run performance tests, use:
+```bash
+make test-performance && bin/test_performance
+```
