@@ -86,8 +86,8 @@ void tests() {
 
     // 0.9 < 4.1
     testResult(
-            "6.1 > 5.2",
-            Frint(6.1f) > Frint(5.2f)
+            "0.9 < 4.1",
+            Frint(0.9) > Frint(4.1)
     );
 
     // 0.4 == 0.4

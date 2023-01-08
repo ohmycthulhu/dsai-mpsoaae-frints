@@ -69,6 +69,7 @@ inline double powerTen(short deg) {
 }
 
 long MAX_NUMBER = 10000000; /* 10^7 */
+long MAX_DIGITS = 9; /* 10^7 */
 
 /**
  * Constructors
@@ -143,8 +144,7 @@ std::string Frint::toString() const {
  * */
 
 bool Frint::operator==(const Frint& other) const {
-    /* TODO: Implement */
-    return false;
+    return this->mExponent == other.mExponent && this->mSignificand == other.mSignificand;
 }
 
 bool Frint::operator!=(const Frint& other) const {
@@ -160,13 +160,23 @@ bool Frint::operator>=(const Frint& other) const {
 }
 
 bool Frint::operator<(const Frint& other) const {
-    /* TODO: Implement */
-    return false;
+    if (this->mExponent != other.mExponent) {
+        return this->mExponent < other.mExponent;
+    }
+
+    long f, s;
+
+    this->normalizeNumbers(*this, other, &f, &s);
+
+    if (f != s) {
+        return f < s;
+    }
+
+    return this->mNbDigits < other.mNbDigits;
 }
 
 bool Frint::operator<=(const Frint& other) const {
-    /* TODO: Implement */
-    return false;
+    return this->operator==(other) || this->operator<(other);
 }
 
 /**
@@ -174,33 +184,34 @@ bool Frint::operator<=(const Frint& other) const {
  * */
 
 Frint Frint::operator+(const Frint& other) const {
+    if (this->operator<(other)) {
+        return other.operator+(*this);
+    }
+
     /* TODO: Implement */
-    return *this;
+    return Frint(*this);
 }
 
 Frint Frint::operator-(const Frint& other) const {
-    /* TODO: Implement */
-    return *this;
+    return this->operator+(other.operator-());
 }
 
 Frint Frint::operator*(const Frint& other) const {
     /* TODO: Implement */
-    return *this;
+    return Frint(*this);
 }
 
 Frint Frint::operator/(const Frint& other) const {
-    /* TODO: Implement */
-    return *this;
+    return this->operator*(other.operator~());
 }
 
 Frint Frint::operator-() const {
-    /* TODO: Implement */
-    return *this;
+    return Frint(-this->mSignificand, this->mExponent);
 }
 
 Frint Frint::operator~() const {
     /* TODO: Implement */
-    return *this;
+    return Frint(*this);
 }
 
 /**
@@ -212,13 +223,11 @@ Frint Frint::operator~() const {
  * */
 
 long int Frint::shiftLeft(long int number, u_short nb) const {
-    /* TODO: Implement */
-    return number;
+    return number * powerTen(nb);
 }
 
 long int Frint::shiftRight(long int number, u_short nb) const {
-    /* TODO: Implement */
-    return number;
+    return number / powerTen(nb);
 }
 
 /**
@@ -226,10 +235,27 @@ long int Frint::shiftRight(long int number, u_short nb) const {
  * */
 
 void Frint::normalizeNumbers(const Frint &bigger, const Frint &smaller, long *fOutput, long *sOutput) const {
-    /* TODO: Implement */
+    if (bigger.mNbDigits < smaller.mNbDigits) {
+        return normalizeNumbers(smaller, bigger, sOutput, fOutput);
+    }
 
-    *fOutput = bigger.mSignificand;
-    *sOutput = smaller.mSignificand;
+    long fTemp = bigger.mSignificand, sTemp = smaller.mSignificand;
+
+    if (bigger.mNbDigits + smaller.mNbDigits < MAX_DIGITS) {
+        *fOutput = fTemp;
+        *sOutput = sTemp;
+        return;
+    }
+
+    if (smaller.mNbDigits * 2 < MAX_DIGITS) {
+        fTemp = this->shiftRight(fTemp, bigger.mNbDigits - smaller.mNbDigits);
+    } else {
+        fTemp = this->shiftRight(fTemp, bigger.mNbDigits - MAX_DIGITS / 2);
+        sTemp = this->shiftRight(sTemp, smaller.mNbDigits - MAX_DIGITS / 2);
+    }
+
+    *fOutput = fTemp;
+    *sOutput = sTemp;
 }
 
 long Frint::normalizeSignificand(const Frint &first, const u_short nbDigitsF, const u_short nbDigitsS) const {
