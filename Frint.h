@@ -40,7 +40,6 @@ protected:
     long int shiftRight(long int number, u_short nb) const;
 
     void normalizeNumbers(const Frint& bigger, const Frint& smaller, long int* fOutput, long int* sOutput) const;
-    long int normalizeSignificand(const Frint& other, const u_short nbDigitsF, const u_short nbDigitsS) const;
 
     long int mSignificand;
     long int mExponent;

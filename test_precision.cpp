@@ -34,8 +34,8 @@ void testResult(const std::string msg, const bool result) {
     std::cout << "Test " << msg << ": " << result << std::endl;
 }
 
-void testResult(const std::string msg, const Frint result) {
-    std::cout << "Test " << msg << ": " << result.toFloat() << std::endl;
+void testResult(const std::string msg, const Frint result, const double actual) {
+    std::cout << "Test " << msg << ": " << result.toFloat() << " (" << actual << ")" << std::endl;
 }
 
 void tests() {
@@ -126,48 +126,77 @@ void tests() {
     // 5.12 + 8
     testResult(
             "5.12 + 8",
-            Frint(5.12f) + Frint(8L)
+            Frint(5.12f) + Frint(8L),
+            5.12 + 8
     );
 
     // 9 + 0
     testResult(
             "9 + 0",
-            Frint(9L) + Frint(0L)
+            Frint(9L) + Frint(0L),
+            9 + 0
     );
 
     // 0.512 + 0.682
     testResult(
             "0.512 + 0.682",
-            Frint(0.512) + Frint(0.682)
+            Frint(0.512) + Frint(0.682),
+            0.512 + 0.682
     );
 
     // 0.512^-1
     testResult(
             "0.512^-1",
-            ~Frint(0.512)
+            ~Frint(0.512),
+            1 / 0.512
     );
 
     // 0.0216 + 0.941
     testResult(
             "0.0216 + 0.941",
-            Frint(0.0216) + Frint(0.941)
+            Frint(0.0216) + Frint(0.941),
+            0.0216 + 0.941
+    );
+
+    // 16 * 95213
+    testResult(
+            "16 * 95213",
+            Frint(16L) * Frint(95213L),
+            16 * 95213
+    );
+
+    // 0.176 * 0.00125
+    testResult(
+            "0.176 * 0.00125",
+            Frint(0.176) * Frint(0.00125),
+            0.176 * 0.00125
     );
 
     // 71 * 96.444
     testResult(
             "71 * 96.444",
-            Frint(71L) * Frint(96.444)
+            Frint(71L) * Frint(96.444),
+            71 * 96.444
+    );
+
+    // 18 * 2.4271
+    testResult(
+            "18 * 2.4271",
+            Frint(18L) * Frint(2.4271),
+            18 * 2.4271
     );
 
     // 18 / 0.4126
     testResult(
             "18 / 0.4126",
-            Frint(18L) / Frint(0.4126)
+            Frint(18L) / Frint(0.4126),
+            18 / 0.4126
     );
 
     // 41 - 0.999
     testResult(
             "41 - 0.999",
-            Frint(41L) - Frint(0.999)
+            Frint(41L) - Frint(0.999),
+            41 - 0.999
     );
 }
